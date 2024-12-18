@@ -62,18 +62,13 @@ const Dashboard: React.FC<DashboardProps> = ({ robots }) => {
 				Robot Fleet Monitoring Dashboard
 			</h1>
 			{/* {error && <div className="bg-red-100 text-red-800 p-4 rounded mb-4">{error}</div>} */}
-			<div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-				{/* Robot List */}
+			<div className="space-y-4">
 				<div className="bg-white rounded-lg shadow-md">
 					<RobotList robots={robots} />
 				</div>
-
-				{/* Robot Map */}
 				<div className="bg-white rounded-lg shadow-md p-4 h-96 overflow-y-auto">
 					<RobotMap robots={robots} />
 				</div>
-
-				{/* Robot Stats */}
 				<div className="bg-white rounded-lg shadow-md p-4 lg:col-span-2">
 					<RobotStats />
 				</div>
