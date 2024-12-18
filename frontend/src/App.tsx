@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect, useState } from 'react';
+import Dashboard from './components/Dashboard';
+import './index.css';
+import { RobotDataType } from './types';
+import { backendURL } from './utils/config';
 
 function App() {
-  const [count, setCount] = useState(0)
+	const [robots, setRobots] = useState<RobotDataType[]>();
+	const [loading, setLoading] = useState(false);
 
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+	useEffect(() => {
+		const fetchRobotsData = async () => {
+			setLoading(true); // Start loading
+			try {
+				const res = await fetch(backendURL);
+				const data = (await res.json()) as RobotDataType[];
+				setRobots(data);
+			} catch (error) {
+				console.log(error);
+			} finally {
+				setLoading(false); // Stop loading after the request completes
+			}
+		};
+
+		fetchRobotsData();
+
+		// const intervalId = setInterval(fetchRobotsData, 5000);
+
+		// return () => clearInterval(intervalId);
+	}, []);
+
+	return (
+		<div className="min-h-screen bg-gray-100 flex justify-center items-center">
+			{loading ? (
+				<div className="text-xl font-semibold">Loading...</div>
+			) : robots ? (
+				<Dashboard robots={robots} />
+			) : (
+				<div>No Robots Found</div>
+			)}
+		</div>
+	);
 }
 
-export default App
+export default App;
